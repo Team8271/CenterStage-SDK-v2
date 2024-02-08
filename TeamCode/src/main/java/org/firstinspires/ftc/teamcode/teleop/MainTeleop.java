@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
+import com.sun.tools.javac.Main;
 
 import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
 
-@TeleOp(name = "Main Teleop",group = "Main")
+@TeleOp(name = "Main Teleop",group = "1")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
 public class MainTeleop extends LinearOpMode {
     Hardwaremap robot;
@@ -20,9 +22,9 @@ public class MainTeleop extends LinearOpMode {
         robot.initVision(); //Initializing Vision TODO: This was purely for debuging purposes
 
         //Creating Driver Threads
-        DrivetrainController driver1 = new DrivetrainController(this,robot); //Base Drivetrain Control
+        MainDriver driver1 = new MainDriver(this,robot); //Base Drivetrain Control
         driver1.start();
-        AcceessoriesController driver2 = new AcceessoriesController(this,robot); //Arm Control
+        SecondaryDriver driver2 = new SecondaryDriver(this,robot); //Arm Control
         driver2.start();
 
         //Waiting for start
@@ -141,6 +143,8 @@ class SecondaryDriver extends Thread {
             double intakeController = opMode.gamepad2.right_trigger;
             double reverseIntakeController = opMode.gamepad2.left_trigger;
             double armExtendControl = -opMode.gamepad2.left_stick_y;
+            double suspendControl = (opMode.gamepad2.dpad_up?1:0)+(opMode.gamepad2.dpad_down?-1:0);
+            double pixelPullerControl = 0;//opMode.gamepad2.left_trigger;
 
             //Setting arm extension directly to the control
             robot.lextend.setPower(armExtendControl);
@@ -181,6 +185,36 @@ class SecondaryDriver extends Thread {
             } else {
                 robot.intake.setPower(0);
             }
+
+            //Pixel Puller
+           if (pixelPullerControl>0) {
+                pixelPullerControl = pixelPullerControl*0.06;
+                robot.pixelPull.setPosition(0.22-pixelPullerControl);
+           } else {
+              robot.pixelPull.setPosition(0.9);
+           }
+
+           //Suspend
+            if (suspendControl == 0) {
+                if (robot.lsuspend.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
+                    robot.lsuspend.setTargetPosition(robot.lsuspend.getCurrentPosition());
+                    robot.rsuspend.setTargetPosition(robot.rsuspend.getCurrentPosition());
+
+                    robot.lsuspend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rsuspend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.lsuspend.setPower(0.5);
+                    robot.rsuspend.setPower(0.5);
+                }
+            } else {
+                if (robot.lsuspend.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                    robot.lsuspend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    robot.rsuspend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+                robot.lsuspend.setPower(suspendControl);
+                robot.rsuspend.setPower(suspendControl);
+            }
+
 
         }
     }

@@ -20,6 +20,10 @@ import org.firstinspires.ftc.teamcode.vision.LineDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
+
 public class Hardwaremap {
     /**
      * Opmode References
@@ -48,6 +52,24 @@ public class Hardwaremap {
         UP
     }
 
+    public enum propPositions {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public enum fieldSides {
+        RED,
+        BLUE
+    }
+
+    //Global Positions
+    public Dictionary<Integer,Double> pixelPullerPositions = new Hashtable<>();
+
+    public propPositions propPosition = null;
+
+    public fieldSides side = null;
+
     /**
      * Hardware Definitions
      */
@@ -59,6 +81,9 @@ public class Hardwaremap {
 
     public DcMotor intake;
 
+    public DcMotor lsuspend;
+    public DcMotor rsuspend;
+
     //Encoder Pods
     public DcMotor le,re,be;
 
@@ -69,6 +94,8 @@ public class Hardwaremap {
 
     public CRServo lextend;
     public CRServo rextend;
+
+    public Servo pixelPull;
 
     //Sensors
     public BNO055IMUNew imu = null;
@@ -102,6 +129,14 @@ public class Hardwaremap {
         //Getting the current hardwaremap
         HardwareMap hwMap = currentOpmode.hardwareMap;
 
+        //Setting Positions
+        pixelPullerPositions.put(0,0.9);
+        pixelPullerPositions.put(1,0.16);
+        pixelPullerPositions.put(2,0.16);
+        pixelPullerPositions.put(3,0.18);
+        pixelPullerPositions.put(4,0.21);
+        pixelPullerPositions.put(5,0.22);
+
         //Initializing Motors
         fl = hwMap.get(DcMotor.class, "FL");
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -123,6 +158,14 @@ public class Hardwaremap {
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        lsuspend = hwMap.get(DcMotor.class, "Lsuspend");
+        lsuspend.setDirection(DcMotorSimple.Direction.FORWARD);
+        lsuspend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        rsuspend = hwMap.get(DcMotor.class, "Rsuspend");
+        rsuspend.setDirection(DcMotorSimple.Direction.FORWARD);
+        rsuspend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         //Initializing Encoders
         le = hwMap.get(DcMotor.class, "FR");
         le.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -136,6 +179,7 @@ public class Hardwaremap {
         be.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         be.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
         //Servos
         armL = hwMap.get(Servo.class,"left arm");
         armL.setDirection(Servo.Direction.FORWARD);
@@ -148,6 +192,9 @@ public class Hardwaremap {
         lextend.setDirection(DcMotorSimple.Direction.REVERSE);
         rextend = hwMap.get(CRServo.class,"Rextend");
         rextend.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        pixelPull = hwMap.get(Servo.class,"PixelPuller");
+        pixelPull.setDirection(Servo.Direction.FORWARD);
 
         //Webcams
         intakeCamera = hwMap.get(WebcamName.class, "Webcam 1");
@@ -197,9 +244,9 @@ public class Hardwaremap {
                 .setEncoderWheelRadius(1.88976/2.0)
 
                 //Setting Up Basic Configuration
-                .setMinSpeed(0.3)
-                .setMaxSpeed(0.7)
-                .setStartSpeed(0.27)
+                .setMinSpeed(0.25)
+                .setMaxSpeed(0.8)
+                .setStartSpeed(0.4)
                 .setSpeedModifier(0.04)
                 .setStopForceSpeed(0.1)
 
@@ -223,7 +270,8 @@ public class Hardwaremap {
                 .getCameraManager().nameForSwitchableCamera(frontCam, backCam);*/
         visionPortal = new VisionPortal.Builder()
                 .setCamera(intakeCamera)
-                .addProcessors(aprilTag, lineDetection)
+                //.addProcessors(aprilTag, lineDetection)
+                .addProcessor(lineDetection)
                 .setCameraResolution(new Size(640,480))
                 .build();
 
@@ -262,11 +310,11 @@ public class Hardwaremap {
     public void setArmPosition(ArmPosition position) {
         if(position==ArmPosition.DOWN) {
             if (armL.getPosition()==0) {
-                armL.setPosition(0.17);
-                armR.setPosition(0.15);
+                armL.setPosition(0.15);
+                armR.setPosition(0.14);
             }
             int step = 0;
-            while (armL.getPosition()>=0.17) {
+            while (armL.getPosition()>=0.15) {
                 if(step<3) {
                     step++;
                     armL.setPosition(armL.getPosition()-0.01);
@@ -279,9 +327,75 @@ public class Hardwaremap {
                 currentOpmode.sleep(5);
             }
         } else {
-            armL.setPosition(0.8);
-            armR.setPosition(0.78);
+            armL.setPosition(0.82);
+            armR.setPosition(0.79);
         }
+    }
+
+    public void scanProp() {
+        List<Prop> detectedProps = lineDetection.getDetectedProps();
+        Prop selectedProp;
+
+        if (detectedProps.size()>0) {
+            selectedProp = detectedProps.get(0);
+
+            if (selectedProp != null) {
+                if (selectedProp.getX()<90) {
+                    propPosition = Hardwaremap.propPositions.LEFT;
+                } else if (selectedProp.getX()>200) {
+                    propPosition = Hardwaremap.propPositions.RIGHT;
+                } else {
+                    propPosition = Hardwaremap.propPositions.CENTER;
+                }
+            }
+        }
+
+        if (propPosition == null) {
+            propPosition = Hardwaremap.propPositions.CENTER;
+        }
+    }
+
+    public void askSide() {
+        TelemetrySelector selector = new TelemetrySelector(currentOpmode);
+        String[] options = {"Red Side","Blue Side"};
+        String selection = selector.simpleSelector("Select Side",options);
+
+
+        if (selection.equals(options[0])) { //First selection
+           side = fieldSides.RED;
+        } else { //Second Selection
+            side = fieldSides.BLUE;
+        }
+
+        currentOpmode.telemetry.clearAll();
+        currentOpmode.telemetry.update();
+    }
+
+    public void breakPoint(String caption) {
+        boolean proceedControl = false;
+
+        while (currentOpmode.opModeIsActive()&&!proceedControl) {
+            proceedControl = currentOpmode.gamepad1.a||currentOpmode.gamepad2.a;
+
+            currentOpmode.telemetry.addLine("You have reached a break point, please press A to proceed.");
+            currentOpmode.telemetry.addData("Caption",caption);
+            currentOpmode.telemetry.update();
+        }
+
+        currentOpmode.telemetry.addLine("Proceeding");
+        currentOpmode.telemetry.update();
+    }
+
+    public void breakPoint() {
+        breakPoint("N/A");
+    }
+
+    public void resetSideFlipped() {
+       if (side == fieldSides.BLUE) {
+           tweetyBird.flipInput(true);
+       } else {
+           tweetyBird.flipInput(false);
+       }
     }
 
     /**

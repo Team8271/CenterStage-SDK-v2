@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
-import org.firstinspires.ftc.teamcode.helpers.Prop;
 
-import java.util.List;
-
-@Autonomous(name = "TweetyBird Debugger",group = "6")
+@Autonomous(name = "TweetyBird Tester",group = "6")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
-public class TweetyDebug extends LinearOpMode {
+public class TweetyTest extends LinearOpMode {
     Hardwaremap robot;
 
     @Override
@@ -27,6 +23,8 @@ public class TweetyDebug extends LinearOpMode {
         //Waiting for start
         waitForStart();
         robot.tweetyBird.engage();
+
+        robot.tweetyBird.straightLineTo(-10,39,180);
 
         while (opModeIsActive());
 

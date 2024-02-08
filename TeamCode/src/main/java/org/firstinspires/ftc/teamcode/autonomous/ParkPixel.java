@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
 
-@Autonomous(name = "PARK - Pixel Side",group = "robot")
+@Autonomous(name = "PARK - Pixel Side",group = "5")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
 public class ParkPixel extends LinearOpMode {
     Hardwaremap robot;
@@ -46,7 +47,7 @@ public class ParkPixel extends LinearOpMode {
 
 
         //Keep the code alive for debug purposes
-        while (opModeIsActive());
+        robot.breakPoint("End of OpMode");
 
         //Always tell tweetybird to manually stop
         robot.tweetyBird.stop();

@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
 
-@TeleOp(name = "Single Driver",group = "Main")
-//@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
+@TeleOp(name = "Single Driver",group = "2")
+@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
 public class SingleDriver extends LinearOpMode {
     Hardwaremap robot;
 
@@ -133,13 +134,13 @@ class AcceessoriesController extends Thread {
         //Runtime loop
         while (opMode.opModeIsActive()) {
             //Controls
-            boolean singleDropper = opMode.gamepad2.a;
-            boolean openDropper = opMode.gamepad2.x;
-            boolean raiseArm = opMode.gamepad2.right_bumper;
-            boolean lowerArm = opMode.gamepad2.left_bumper;
-            double intakeController = opMode.gamepad2.right_trigger;
-            double reverseIntakeController = opMode.gamepad2.left_trigger;
-            double armExtendControl = -opMode.gamepad2.left_stick_y;
+            boolean singleDropper = opMode.gamepad1.a;
+            boolean openDropper = opMode.gamepad1.x;
+            boolean raiseArm = opMode.gamepad1.right_bumper;
+            boolean lowerArm = opMode.gamepad1.left_bumper;
+            double intakeController = opMode.gamepad1.left_trigger;
+            double reverseIntakeController = opMode.gamepad1.y?intakeController*-2:0;
+            double armExtendControl = -opMode.gamepad1.right_stick_y;
 
             //Setting arm extension directly to the control
             robot.lextend.setPower(armExtendControl);

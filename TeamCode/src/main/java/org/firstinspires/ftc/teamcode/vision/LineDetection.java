@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
 import org.firstinspires.ftc.teamcode.helpers.Prop;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.android.Utils;
@@ -80,32 +81,39 @@ public class LineDetection implements VisionProcessor, CameraStreamSource {
         redThreshPart1.release();
         redThreshPart2.release();
 
-        //Finding contours
-        List<MatOfPoint> contours = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        Imgproc.findContours(redThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-        Imgproc.findContours(blueThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-
         //Clear detected props list
         detectedProps.clear();
 
-        //Looping though contours
-        for(int i = 0; i < contours.size(); i ++) {
-            //Copying contour
-            MatOfPoint2f copy = new MatOfPoint2f(contours.get(i).toArray());
-            Rect rect = Imgproc.boundingRect(copy);
-            double area = Imgproc.contourArea(copy);
+        //Finding contours
+        for (int i = 0; i<2; i++) {
+            List<MatOfPoint> contours = new ArrayList<>();
+            Mat hierarchy = new Mat();
+            Imgproc.findContours(i==0?redThresh:blueThresh, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 
-            //THe prep
-            if (area>2600) {
-                Imgproc.rectangle(input,rect,new Scalar(145,14,220),2);
-                detectedProps.add(new Prop(rect.x,rect.y,area));
+            //Looping though contours
+            for(int x = 0; x < contours.size(); x ++) {
+                //Copying contour
+                MatOfPoint2f copy = new MatOfPoint2f(contours.get(x).toArray());
+                Rect rect = Imgproc.boundingRect(copy);
+                double area = Imgproc.contourArea(copy);
+
+                Scalar redColor = new Scalar(255,0,0);
+                Scalar blueColor = new Scalar(0,0,255);
+
+                //THe prep
+                if (area>1500&&rect.y>300) {
+                    Imgproc.rectangle(input,rect,i==0?redColor:blueColor,2);
+                    detectedProps.add(new Prop(rect.x,rect.y,area,i==0? Hardwaremap.fieldSides.RED: Hardwaremap.fieldSides.BLUE));
+                }
+
+
+                //Releasing the contour
+                copy.release();
             }
 
-
-            //Releasing the contour
-            copy.release();
+            hierarchy.release();
         }
+
 
 
         //Releasing
