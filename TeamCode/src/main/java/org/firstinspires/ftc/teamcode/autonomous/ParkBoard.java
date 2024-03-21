@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
 
 @Autonomous(name = "PARK - Board Side",group = "5")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE

@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
-import org.firstinspires.ftc.teamcode.helpers.Prop;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
 
 @Autonomous(name = "TweetyBird Debugger",group = "6")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE

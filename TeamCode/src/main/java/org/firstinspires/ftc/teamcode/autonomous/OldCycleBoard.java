@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
 
 @Autonomous(name = "OLD CYCLE - Board Side",group = "3")
 @Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE

@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
-import org.firstinspires.ftc.teamcode.helpers.TelemetrySelector;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
 
 @Autonomous(name = "BASIC - Pixel Side",group = "4")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE

@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
-import com.sun.tools.javac.Main;
 
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
 
 @TeleOp(name = "Main Teleop",group = "1")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
