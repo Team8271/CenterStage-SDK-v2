@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode.vision;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.helpers.Hardwaremap;
-import org.firstinspires.ftc.teamcode.helpers.Prop;
+import org.firstinspires.ftc.teamcode.util.Hardwaremap;
+import org.firstinspires.ftc.teamcode.util.Prop;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
