@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.chesterlk.ftc.tweetybird.TweetyBirdProcessor;
+import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 import com.qualcomm.hardware.bosch.BNO055IMUNew;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -237,8 +237,8 @@ public class Hardwaremap {
                 .flipRightEncoder(true)
                 .flipMiddleEncoder(true)
 
-                .setInchesBetweenSideEncoders(11+(7.0/8.0))
-                .setInchesToBackEncoder(-2)
+                .setSideEncoderDistance(11+(7.0/8.0))
+                .setMiddleEncoderOffset(-2)
 
                 .setTicksPerEncoderRotation(2000)
                 .setEncoderWheelRadius(1.88976/2.0)
@@ -271,7 +271,7 @@ public class Hardwaremap {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(intakeCamera)
                 //.addProcessors(aprilTag, lineDetection)
-                .addProcessor(lineDetection)
+                .addProcessors(lineDetection,aprilTag)
                 .setCameraResolution(new Size(640,480))
                 .build();
 
