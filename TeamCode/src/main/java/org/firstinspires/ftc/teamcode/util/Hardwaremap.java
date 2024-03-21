@@ -251,8 +251,8 @@ public class Hardwaremap {
                 .setStopForceSpeed(0.1)
 
                 .setCorrectionOverpowerDistance(5)
-                .setDistanceBuffer(1)
-                .setRotationBuffer(8)
+                .setDistanceBuffer(1.5)
+                .setRotationBuffer(2)
 
                 //Build(create) TweetyBird
                 .build();
