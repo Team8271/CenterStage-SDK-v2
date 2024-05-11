@@ -184,7 +184,7 @@ public class Hardwaremap {
         armL = hwMap.get(Servo.class,"left arm");
         armL.setDirection(Servo.Direction.FORWARD);
         armR = hwMap.get(Servo.class,"right arm");
-        armR.setDirection(Servo.Direction.FORWARD);
+        armR.setDirection(Servo.Direction.REVERSE);
         dropper = hwMap.get(Servo.class,"dropper");
         dropper.setDirection(Servo.Direction.FORWARD);
 
